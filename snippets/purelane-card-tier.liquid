@@ -1,0 +1,78 @@
+{%- comment -%}
+  Bundle tier card. Accepts: block
+{%- endcomment -%}
+{%- liquid
+  assign product = block.settings.product
+  assign qty = block.settings.quantity
+  assign highlight = block.settings.highlight
+  assign features = block.settings.features | split: '\n'
+  assign images = block.settings.products
+-%}
+<article class="glass tier{% if highlight %} best{% endif %} rv{% if highlight %} rv-d2{% endif %}" {{ block.shopify_attributes }}>
+  {%- if block.settings.tag != blank -%}
+    <span class="tag">{{ block.settings.tag }}</span>
+  {%- endif -%}
+  {%- if images != blank -%}
+    <div class="tierpix{% if images.size >= 5 %} five{% endif %}" aria-hidden="true">
+      {%- for item in images limit: 5 -%}
+        {%- if item.featured_image -%}
+          <img
+            class="pimg"
+            src="{{ item.featured_image | image_url: width: 200 }}"
+            alt=""
+            width="60"
+            height="90"
+            loading="lazy"
+          >
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  {%- elsif product.featured_image -%}
+    <div class="tierpix" aria-hidden="true">
+      <img
+        class="pimg"
+        src="{{ product.featured_image | image_url: width: 320 }}"
+        alt=""
+        width="120"
+        height="90"
+        loading="lazy"
+      >
+    </div>
+  {%- endif -%}
+  <div class="qty">
+    {{ qty }}<small>{{ block.settings.quantity_label | default: 'Products' }}</small>
+  </div>
+  <div class="price">
+    {%- if product -%}
+      {{ product.price | money_without_trailing_zeros }}
+      {%- if product.compare_at_price > product.price -%}
+        <s>{{ product.compare_at_price | money_without_trailing_zeros }}</s>
+      {%- endif -%}
+    {%- else -%}
+      {{ block.settings.price_label }}
+      {%- if block.settings.compare_label != blank -%}
+        <s>{{ block.settings.compare_label }}</s>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+  {%- if block.settings.per_unit != blank -%}
+    <p class="body-s" style="font-size:12px">{{ block.settings.per_unit }}</p>
+  {%- endif -%}
+  {%- if features.size > 0 -%}
+    <ul>
+      {%- for line in features -%}
+        {%- assign trimmed = line | strip -%}
+        {%- if trimmed != blank -%}
+          <li>{% render 'purelane-icon', icon: 'check' %}{{ trimmed }}</li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+  <a
+    class="btn {% if highlight %}btn-primary{% else %}btn-ghost{% endif %}"
+    href="{{ block.settings.cta_link | default: '#shop' }}"
+  >
+    {{ block.settings.cta_label | default: 'Build this box' }}
+    {%- if highlight -%}{% render 'purelane-icon', icon: 'arrow' %}{%- endif -%}
+  </a>
+</article>

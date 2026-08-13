@@ -1,0 +1,110 @@
+<section class="sec" id="bundles" data-scene="3">
+  <div class="wrap">
+    <div class="glass sec-pad rv" style="margin-bottom:16px">
+      <div class="panel-head" style="margin-bottom:0">
+        {%- if section.settings.kicker != blank -%}
+          <span class="kicker">{{ section.settings.kicker }}</span>
+        {%- endif -%}
+        <h2 class="d2" style="margin-top:12px">{{ section.settings.heading }}</h2>
+        {%- if section.settings.lede != blank -%}
+          <p class="lede" style="margin:0 auto">{{ section.settings.lede }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+    {%- assign tiers = section.blocks | where: 'type', 'tier' -%}
+    {%- if tiers.size == 0 -%}
+      <p class="pl-empty">Add bundle tiers in the theme editor.</p>
+    {%- else -%}
+      <div class="tiers">
+        {%- for block in tiers -%}
+          {% render 'purelane-card-tier', block: block %}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Purelane bundles",
+  "tag": "div",
+  "class": "purelane-bundles-section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Build your bundle" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "One box. Every room." },
+    {
+      "type": "textarea",
+      "id": "lede",
+      "label": "Lede",
+      "default": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tier",
+      "name": "Bundle tier",
+      "limit": 6,
+      "settings": [
+        { "type": "text", "id": "tag", "label": "Tag", "default": "Starter" },
+        { "type": "product", "id": "product", "label": "Offer product (price source)" },
+        { "type": "product_list", "id": "products", "label": "Preview products", "limit": 5 },
+        { "type": "number", "id": "quantity", "label": "Quantity", "default": 2 },
+        { "type": "text", "id": "quantity_label", "label": "Quantity label", "default": "Products" },
+        { "type": "text", "id": "price_label", "label": "Price fallback", "default": "₹349" },
+        { "type": "text", "id": "compare_label", "label": "Compare-at fallback", "default": "₹598" },
+        { "type": "text", "id": "per_unit", "label": "Per-unit line", "default": "Flat ₹174 per product" },
+        {
+          "type": "textarea",
+          "id": "features",
+          "label": "Features (one per line)",
+          "default": "Pick any two products\nFree shipping across India"
+        },
+        { "type": "text", "id": "cta_label", "label": "Button label", "default": "Build this box" },
+        { "type": "url", "id": "cta_link", "label": "Button link" },
+        { "type": "checkbox", "id": "highlight", "label": "Highlight as most popular", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane bundles",
+      "blocks": [
+        {
+          "type": "tier",
+          "settings": {
+            "tag": "Starter",
+            "quantity": 2,
+            "price_label": "₹349",
+            "compare_label": "₹598",
+            "per_unit": "Flat ₹174 per product",
+            "features": "Pick any two products\nFree shipping across India"
+          }
+        },
+        {
+          "type": "tier",
+          "settings": {
+            "tag": "Most popular",
+            "quantity": 3,
+            "price_label": "₹499",
+            "compare_label": "₹897",
+            "per_unit": "Flat ₹166 per product",
+            "features": "Pick any three products\nCovers kitchen and laundry\nFree shipping across India",
+            "highlight": true
+          }
+        },
+        {
+          "type": "tier",
+          "settings": {
+            "tag": "Whole home",
+            "quantity": 5,
+            "price_label": "₹799",
+            "compare_label": "₹1,495",
+            "per_unit": "Flat ₹160 per product",
+            "features": "Pick any five products\nEvery room in one order\nFree shipping across India"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
