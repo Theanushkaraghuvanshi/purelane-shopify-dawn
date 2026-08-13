@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="theme-color" content="">
+    <meta name="theme-color" content="{% if template.name == 'index' %}#eee7fb{% endif %}">
     <link rel="canonical" href="{{ canonical_url }}">
 
     {%- if settings.favicon != blank -%}
@@ -279,6 +279,12 @@
     {% endstyle %}
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
+    {%- if template.name == 'index' -%}
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+      {{ 'purelane.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.cart_type == 'drawer' -%}
@@ -321,7 +327,7 @@
     </script>
   </head>
 
-  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}{% if template.name == 'index' %} purelane-home{% endif %}">
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>
@@ -330,7 +336,11 @@
       {%- render 'cart-drawer' -%}
     {%- endif -%}
 
-    {% sections 'header-group' %}
+    {%- if template.name == 'index' -%}
+      {% render 'purelane-atmosphere' %}
+    {%- else -%}
+      {% sections 'header-group' %}
+    {%- endif -%}
 
     <main
       id="MainContent"
@@ -342,7 +352,13 @@
       {{ content_for_layout }}
     </main>
 
-    {% sections 'footer-group' %}
+    {%- unless template.name == 'index' -%}
+      {% sections 'footer-group' %}
+    {%- endunless -%}
+
+    {%- if template.name == 'index' -%}
+      <script src="{{ 'purelane.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
 
     <ul hidden>
       <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>

@@ -1,0 +1,103 @@
+{%- liquid
+  assign ticker_blocks = section.blocks | where: 'type', 'ticker'
+-%}
+<div class="ticker" aria-hidden="true">
+  <div class="track">
+    {%- for pass in (1..2) -%}
+      {%- for block in ticker_blocks -%}
+        <span {{ block.shopify_attributes }}>
+          {{ block.settings.text }}
+          {%- if block.settings.highlight != blank -%}
+            <b>{{ block.settings.highlight }}</b>
+          {%- endif -%}
+        </span>
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+<header class="pl-header" id="pl-hdr" data-pl-header>
+  <div class="navpill glass">
+    <a class="brand" href="{{ routes.root_url }}" aria-label="{{ section.settings.logo_text | default: shop.name }} home">
+      <span class="mark">{% render 'purelane-icon', icon: 'leaf' %}</span>
+      <span class="txt">
+        <span class="n1">{{ section.settings.logo_text | default: shop.name }}</span>
+        <span class="n2">{{ section.settings.tagline }}</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      {%- if section.settings.menu != blank -%}
+        {%- for link in section.settings.menu.links -%}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        {%- endfor -%}
+      {%- else -%}
+        <a href="#top">Home</a>
+        <a href="#shop">Shop</a>
+        <a href="#combos">Combos</a>
+        <a href="#bundles">Bundles</a>
+        <a href="#reviews">Reviews</a>
+      {%- endif -%}
+    </nav>
+    <div class="navtools">
+      <a class="ico hide-s" href="{{ routes.search_url }}" aria-label="Search">{% render 'purelane-icon', icon: 'search' %}</a>
+      <a class="ico hide-s" href="{{ routes.account_url }}" aria-label="Account">{% render 'purelane-icon', icon: 'account' %}</a>
+      <a class="ico" href="{{ routes.cart_url }}" id="cart-icon-bubble" aria-label="Cart">
+        {% render 'purelane-icon', icon: 'cart' %}
+        <span class="dot" data-pl-cart-count>{{ cart.item_count }}</span>
+      </a>
+      <button class="ico burger" type="button" data-pl-burger aria-label="Menu" aria-expanded="false">
+        {% render 'purelane-icon', icon: 'menu' %}
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="pl-drawer" data-pl-drawer aria-hidden="true">
+  <nav aria-label="Mobile">
+    {%- if section.settings.menu != blank -%}
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {%- endfor -%}
+    {%- else -%}
+      <a href="#top">Home</a>
+      <a href="#shop">Shop</a>
+      <a href="#combos">Combos</a>
+      <a href="#bundles">Bundles</a>
+      <a href="#reviews">Reviews</a>
+    {%- endif -%}
+  </nav>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane header",
+  "tag": "section",
+  "class": "purelane-header-section",
+  "settings": [
+    { "type": "text", "id": "logo_text", "label": "Brand name", "default": "Purelane" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Clean, simply" },
+    { "type": "link_list", "id": "menu", "label": "Menu" }
+  ],
+  "blocks": [
+    {
+      "type": "ticker",
+      "name": "Ticker item",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Free shipping" },
+        { "type": "text", "id": "highlight", "label": "Highlighted text", "default": "on every bundle across India" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane header",
+      "blocks": [
+        { "type": "ticker" },
+        { "type": "ticker", "settings": { "text": "100% plant-based", "highlight": "and non-toxic" } },
+        { "type": "ticker", "settings": { "text": "Loved by", "highlight": "30,000+ happy homes" } },
+        { "type": "ticker", "settings": { "text": "Buy 3", "highlight": "at flat ₹499" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

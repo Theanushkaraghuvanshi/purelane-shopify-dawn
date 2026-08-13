@@ -1,0 +1,23 @@
+{%- comment -%}
+  price, compare_at (money in cents), save_style: percent | amount | both
+{%- endcomment -%}
+{%- liquid
+  assign compare = compare_at | default: 0
+  assign save_style = save_style | default: 'percent'
+  assign show_compare = false
+  if compare > price and price > 0
+    assign show_compare = true
+    assign save_amount = compare | minus: price
+    assign save_pct = save_amount | times: 100.0 | divided_by: compare | round
+  endif
+-%}
+<strong>{{ price | money_without_trailing_zeros }}</strong>
+{%- if show_compare -%}
+  <s>{{ compare | money_without_trailing_zeros }}</s>
+  {%- if save_style == 'percent' or save_style == 'both' -%}
+    <em>{{ save_pct }}% off</em>
+  {%- endif -%}
+  {%- if save_style == 'amount' or save_style == 'both' -%}
+    <em>Save {{ save_amount | money_without_trailing_zeros }}</em>
+  {%- endif -%}
+{%- endif -%}
