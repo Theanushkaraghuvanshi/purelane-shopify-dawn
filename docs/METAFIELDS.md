@@ -14,6 +14,7 @@ Create these in **Settings → Custom data** (or run `node scripts/seed-catalog.
 | `custom` | `flag` | Single line text | Combo corner flag (Most popular / Best value) |
 | `custom` | `save_label` | Single line text | Combo save pill |
 | `custom` | `highlight` | True/false | Emphasised combo card |
+| `custom` | `sold_out` | True/false | Force sold-out card when inventory scope is unavailable |
 | `reviews` | `rating` | Decimal | Shop card star rating |
 | `reviews` | `rating_count` | Integer | Shop card review count |
 

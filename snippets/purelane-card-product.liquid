@@ -6,6 +6,10 @@
   assign delay_class = delay_class | default: ''
   assign variant = product.selected_or_first_available_variant
   assign badge = product.metafields.custom.badge
+  assign sold_out = false
+  if product.available == false or product.metafields.custom.sold_out.value
+    assign sold_out = true
+  endif
   assign rating = product.metafields.reviews.rating.value
   assign rating_count = product.metafields.reviews.rating_count
   if rating == blank and product.metafields.reviews.rating != blank
@@ -16,7 +20,7 @@
   <div class="shot">
     {%- if badge != blank -%}
       <span class="pill">{{ badge }}</span>
-    {%- elsif product.available == false -%}
+    {%- elsif sold_out -%}
       <span class="pill">Sold out</span>
     {%- endif -%}
     {%- if product.featured_image -%}
@@ -43,7 +47,7 @@
   <div class="pr">
     {% render 'purelane-price', price: variant.price, compare_at: variant.compare_at_price, save_style: 'percent' %}
   </div>
-  {%- if variant and product.available -%}
+  {%- if variant and sold_out == false -%}
     <button
       type="button"
       class="btn btn-ghost btn-sm"
