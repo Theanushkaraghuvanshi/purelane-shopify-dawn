@@ -11,13 +11,13 @@
     assign save_pct = save_amount | times: 100.0 | divided_by: compare | round
   endif
 -%}
-<strong>{{ price | money_without_trailing_zeros }}</strong>
+<strong>{% render 'purelane-money', amount: price %}</strong>
 {%- if show_compare -%}
-  <s>{{ compare | money_without_trailing_zeros }}</s>
+  <s>{% render 'purelane-money', amount: compare %}</s>
   {%- if save_style == 'percent' or save_style == 'both' -%}
     <em>{{ save_pct }}% off</em>
   {%- endif -%}
   {%- if save_style == 'amount' or save_style == 'both' -%}
-    <em>Save {{ save_amount | money_without_trailing_zeros }}</em>
+    <em>Save {% render 'purelane-money', amount: save_amount %}</em>
   {%- endif -%}
 {%- endif -%}

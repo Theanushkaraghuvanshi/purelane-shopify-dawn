@@ -111,9 +111,9 @@
                 <span class="lbl">{{ block.settings.label }}</span>
                 <span class="val">
                   {%- if style == '1' and block.settings.use_product_price and p1.price > 0 -%}
-                    <strong>{{ p1.price | money_without_trailing_zeros }}</strong>
+                    <strong>{% render 'purelane-money', amount: p1.price %}</strong>
                     {%- if p1.compare_at_price > p1.price -%}
-                      <s>{{ p1.compare_at_price | money_without_trailing_zeros }}</s>
+                      <s>{% render 'purelane-money', amount: p1.compare_at_price %}</s>
                     {%- endif -%}
                   {%- else -%}
                     <strong>{{ block.settings.price_label }}</strong>

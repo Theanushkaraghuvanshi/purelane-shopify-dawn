@@ -103,7 +103,7 @@ async function createProduct({ handle, title, body, type, image, price, compare 
     }`,
     {
       productId: product.id,
-      variants: [{ id: variantId, price, compareAtPrice: compare }],
+      variants: [{ id: variantId, price, compareAtPrice: compare, inventoryPolicy: 'CONTINUE' }],
     }
   );
   return product;
@@ -205,6 +205,23 @@ async function main() {
   }
 
   console.log('seeded', Object.keys(created).length, 'products');
+
+  // 2024-10 ProductCreateInput has no published flag; 2023-10 productUpdate still does.
+  for (const product of Object.values(created)) {
+    if (!product?.id) continue;
+    const pub = await fetch('https://purelane-joazssp6.myshopify.com/admin/api/2023-10/graphql.json', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({
+        query: `mutation ($input: ProductInput!) {
+          productUpdate(input: $input) { product { handle publishedAt } userErrors { message } }
+        }`,
+        variables: { input: { id: product.id, published: true } },
+      }),
+    }).then((r) => r.json());
+    const at = pub.data?.productUpdate?.product?.publishedAt;
+    console.log('publish', pub.data?.productUpdate?.product?.handle, at || JSON.stringify(pub.data?.productUpdate?.userErrors || pub.errors));
+  }
 }
 
 main().catch((err) => {

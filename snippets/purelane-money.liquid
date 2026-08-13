@@ -1,0 +1,2 @@
+{%- comment -%}INR glyph to match the prototype, regardless of shop money format.{%- endcomment -%}
+₹{{ amount | money_without_currency | remove: '.00' }}

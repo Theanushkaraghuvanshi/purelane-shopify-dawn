@@ -3,6 +3,9 @@
 {%- endcomment -%}
 {%- liquid
   assign variant = product.selected_or_first_available_variant
+  if variant == blank
+    assign variant = product.variants.first
+  endif
   assign components = product.metafields.custom.components.value
   assign flag = product.metafields.custom.flag
   assign save_label = product.metafields.custom.save_label
@@ -30,7 +33,7 @@
     {%- if save_label != blank -%}
       <span class="save">{{ save_label }}</span>
     {%- elsif save_amount > 0 -%}
-      <span class="save">You save {{ save_amount | money_without_trailing_zeros }}</span>
+      <span class="save">You save {% render 'purelane-money', amount: save_amount %}</span>
     {%- endif -%}
     {%- if flag != blank -%}
       <span class="flag">{{ flag }}</span>
@@ -72,7 +75,7 @@
       {% render 'purelane-price', price: variant.price, compare_at: compare, save_style: 'amount' %}
     </div>
     <div class="fine">Inclusive of all taxes · COD available</div>
-    {%- if variant and product.available -%}
+    {%- if variant -%}
       <button
         type="button"
         class="btn {% if highlight %}btn-primary{% else %}btn-ghost{% endif %}"

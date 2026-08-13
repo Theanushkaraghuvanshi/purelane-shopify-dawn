@@ -2,7 +2,7 @@
 
 Store: `purelane-joazssp6.myshopify.com`
 
-Create these in **Settings → Custom data** (or run `node scripts/seed-catalog.mjs` with an Admin API token).
+Create these in **Settings → Custom data** (or run `node scripts/seed-from-cli.mjs` with a Shopify CLI session, which also publishes products to the Online Store channel).
 
 ## Product metafields
 

@@ -36,9 +36,9 @@ Checked against the HTML spec and the password-gated storefront:
 
 - Section order matches the file: hero → reviews → combos → bundles → shop (bonus sections omitted).
 - Hero padding `150px` / `132px` at 900px, tokens (`--ink #17102b`), glass, type, and reduced-motion CSS/JS.
-- First `theme push` ran **before** the catalog existed, so Shopify dropped `product` / `product_list` handles from `index.json`. Sections now fall back to `all_products[handle]` when a picker is empty, and always render hero bottles (product media or theme SVG).
+- First `theme push` ran **before** the catalog existed, so Shopify dropped `product` / `product_list` handles from `index.json`. `productCreate` also left `publishedAt` null (ACTIVE but not on the Online Store channel). Sections fall back to `all_products[handle]` when a picker is empty; seed now publishes via the 2023-10 `productUpdate(published: true)` mutation.
 - Reviews: duplicate marquee set is `aria-hidden` only on the second pass (`0` is truthy in Liquid — do not pass `index0`).
-- Shop fixtures: unique products (no prototype duplication), fabric conditioner has no image, magic eraser is sold out via `custom.sold_out`, long-title SKU is line-clamped to two lines.
+- Shop fixtures: unique products (no prototype duplication), fabric conditioner has no image, magic eraser is sold out via `custom.sold_out`, long-title SKU is line-clamped to two lines. Variants use `inventoryPolicy: CONTINUE` because the CLI session cannot write inventory quantities.
 - Theme editor: `shopify:section:load` / `unload` tears down hero timers; atmosphere lives in the layout so reordering the five sections cannot kill the background.
 - CWV: no `feTurbulence`, no page-wide `backdrop-filter`, fonts `display=swap` + preconnect. Remaining cost is Google Fonts CSS (self-host next) and hero PNGs.
 

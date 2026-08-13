@@ -5,9 +5,12 @@
 {%- liquid
   assign delay_class = delay_class | default: ''
   assign variant = product.selected_or_first_available_variant
+  if variant == blank
+    assign variant = product.variants.first
+  endif
   assign badge = product.metafields.custom.badge
   assign sold_out = false
-  if product.available == false or product.metafields.custom.sold_out.value
+  if product.metafields.custom.sold_out.value == true
     assign sold_out = true
   endif
   assign rating = product.metafields.reviews.rating.value

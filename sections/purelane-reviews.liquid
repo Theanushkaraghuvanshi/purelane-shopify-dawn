@@ -23,12 +23,6 @@
     <div class="revrail rv" aria-label="Customer reviews">
       <div class="revtrack">
         {%- for pass in (1..2) -%}
-          {%- liquid
-            assign is_dup = false
-            if pass == 2
-              assign is_dup = true
-            endif
-          -%}
           {%- for block in reviews -%}
             {% render 'purelane-card-review',
               title: block.settings.title,
@@ -36,7 +30,7 @@
               author: block.settings.author,
               product_label: block.settings.product_label,
               rating: block.settings.rating,
-              duplicate: is_dup
+              duplicate: pass
             %}
           {%- endfor -%}
         {%- endfor -%}
