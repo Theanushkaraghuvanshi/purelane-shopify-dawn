@@ -162,6 +162,24 @@
         }
       }
       if (scenes) scenes.pickScene();
+      const railLinks = Array.from(document.querySelectorAll('.rail a'));
+      if (railLinks.length) {
+        const mid = y + window.innerHeight * 0.42;
+        let idx = 0;
+        railLinks.forEach((a, i) => {
+          const t = document.querySelector(a.getAttribute('href'));
+          if (t) {
+            let top = 0;
+            let el = t;
+            while (el) {
+              top += el.offsetTop;
+              el = el.offsetParent;
+            }
+            if (top <= mid) idx = i;
+          }
+        });
+        railLinks.forEach((a, i) => a.classList.toggle('on', i === idx));
+      }
     }
 
     function onScroll() {
@@ -232,6 +250,49 @@
     }
   }
 
+  function initRotator(root) {
+    const rot = root.querySelector('[data-pl-rot]');
+    if (!rot || rot.dataset.plBound) return null;
+    rot.dataset.plBound = '1';
+    const rimgs = Array.from(rot.querySelectorAll('.frame .pimg'));
+    const rdots = Array.from(rot.querySelectorAll('.dots i'));
+    const rcapB = rot.querySelector('.cap b');
+    const rcapS = rot.querySelector('.cap span');
+    if (!rimgs.length) return null;
+    let ri = Math.max(0, rimgs.findIndex((el) => el.classList.contains('on')));
+    let rtimer = null;
+    function rstep() {
+      rimgs[ri].classList.remove('on');
+      if (rdots[ri]) rdots[ri].classList.remove('on');
+      ri = (ri + 1) % rimgs.length;
+      rimgs[ri].classList.add('on');
+      if (rdots[ri]) rdots[ri].classList.add('on');
+      if (rcapB) rcapB.innerHTML = rimgs[ri].getAttribute('data-name') || '';
+      if (rcapS) rcapS.textContent = rimgs[ri].getAttribute('data-note') || '';
+    }
+    if (prefersReduced()) return { stop() {} };
+    const rio = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && !rtimer) rtimer = setInterval(rstep, 2900);
+          else if (!e.isIntersecting && rtimer) {
+            clearInterval(rtimer);
+            rtimer = null;
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+    rio.observe(rot);
+    return {
+      stop() {
+        if (rtimer) clearInterval(rtimer);
+        rio.disconnect();
+      },
+      io: rio,
+    };
+  }
+
   function initAtc(root) {
     root.querySelectorAll('[data-pl-atc]').forEach((btn) => {
       if (btn.dataset.plBound) return;
@@ -250,7 +311,9 @@
     const hero = initHero(scope);
     const headerBits = initHeader(scope);
     initAtc(scope);
+    const rotator = initRotator(scope);
     if (hero) instances.set(scope, hero);
+    else if (rotator) instances.set(scope, rotator);
     return { headerBits };
   }
 

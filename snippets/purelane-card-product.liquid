@@ -26,7 +26,10 @@
     {%- elsif sold_out -%}
       <span class="pill">Sold out</span>
     {%- endif -%}
-    {%- if product.featured_image -%}
+    {%- capture bottle -%}{% render 'purelane-pimg', handle: product.handle, label: product.title %}{%- endcapture -%}
+    {%- if bottle != blank -%}
+      {{ bottle }}
+    {%- elsif product.featured_image -%}
       <img
         class="pimg"
         src="{{ product.featured_image | image_url: width: 480 }}"
@@ -36,7 +39,10 @@
         loading="lazy"
       >
     {%- else -%}
-      <span class="ph-empty">No image</span>
+      <span class="ph-empty" role="img" aria-label="{{ product.title | escape }} — no product photo">
+        <span class="ph-empty-mark" aria-hidden="true">{% render 'purelane-icon', icon: 'leaf' %}</span>
+        No image
+      </span>
     {%- endif -%}
   </div>
   <h3>

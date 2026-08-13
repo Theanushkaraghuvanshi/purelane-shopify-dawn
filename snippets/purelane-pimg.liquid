@@ -1,0 +1,48 @@
+{%- comment -%}
+  Prototype bottle art as a real <img> (theme SVG asset).
+  CSS-background spans collapse to 0×0 inside Dawn grid cards.
+  Accepts: handle OR art (p-kitchen), plus optional label.
+{%- endcomment -%}
+{%- liquid
+  assign klass = art | default: ''
+  if klass == blank
+    case handle
+      when 'kitchen-cleaner-foaming'
+        assign klass = 'p-kitchen'
+      when 'tap-cleaner-limescale-remover'
+        assign klass = 'p-tap'
+      when 'dishwash-gel'
+        assign klass = 'p-dish'
+      when 'floor-cleaner'
+        assign klass = 'p-floor'
+      when 'toilet-cleaner'
+        assign klass = 'p-toilet'
+      when 'laundry-detergent'
+        assign klass = 'p-laundry'
+      when 'copper-bronze-brass-cleaner'
+        assign klass = 'p-metal'
+      when 'washing-machine-cleaner-descaler'
+        assign klass = 'p-wm'
+      when 'plant-based-concentrated-washing-machine-cleaner-and-hard-water-descaler-tablets-for-front-load-and-top-load-machines'
+        assign klass = 'p-wm'
+      when 'liquid-handwash', 'handwash', 'gentle-hydrating-liquid-handwash'
+        assign klass = 'p-handwash'
+      when 'magic-eraser'
+        assign klass = 'p-eraser'
+      when 'build-a-box-2', 'build-a-box-3', 'build-a-box-5'
+        assign klass = 'p-combo2'
+    endcase
+  endif
+-%}
+{%- if klass != blank -%}
+  {%- assign file = klass | append: '.svg' -%}
+  <img
+    class="pimg"
+    src="{{ file | asset_url }}"
+    alt="{{ label | default: handle | escape }}"
+    width="78"
+    height="122"
+    loading="lazy"
+    decoding="async"
+  >
+{%- endif -%}

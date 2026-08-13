@@ -24,7 +24,10 @@
   {%- if images != blank -%}
     <div class="tierpix{% if images.size >= 5 %} five{% endif %}" aria-hidden="true">
       {%- for item in images limit: 5 -%}
-        {%- if item.featured_image -%}
+        {%- capture bottle -%}{% render 'purelane-pimg', handle: item.handle, label: item.title %}{%- endcapture -%}
+        {%- if bottle != blank -%}
+          {{ bottle }}
+        {%- elsif item.featured_image -%}
           <img
             class="pimg"
             src="{{ item.featured_image | image_url: width: 200 }}"

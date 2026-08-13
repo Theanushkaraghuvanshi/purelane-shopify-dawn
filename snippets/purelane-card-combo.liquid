@@ -45,7 +45,10 @@
             <span class="plus" aria-hidden="true">+</span>
           {%- endunless -%}
           <span class="it">
-            {%- if item.featured_image -%}
+            {%- capture bottle -%}{% render 'purelane-pimg', handle: item.handle, label: item.title %}{%- endcapture -%}
+            {%- if bottle != blank -%}
+              {{ bottle }}
+            {%- elsif item.featured_image -%}
               <img
                 class="pimg"
                 src="{{ item.featured_image | image_url: width: 240 }}"
