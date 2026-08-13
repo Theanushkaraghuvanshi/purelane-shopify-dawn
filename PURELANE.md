@@ -22,6 +22,8 @@ Seed catalog: import `seed/products.csv` in **Products → Import**, then set me
 
 ## Docs
 
-- [docs/BUILD_NOTES.md](docs/BUILD_NOTES.md)
-- [docs/AI_WORKFLOW.md](docs/AI_WORKFLOW.md)
-- [docs/METAFIELDS.md](docs/METAFIELDS.md)
+- [docs/BUILD_NOTES.md](docs/BUILD_NOTES.md) — flags, production fixes, gaps
+- [docs/AI_WORKFLOW.md](docs/AI_WORKFLOW.md) — what the agent did and where it failed
+- [docs/METAFIELDS.md](docs/METAFIELDS.md) — custom data
+- [docs/DISCOUNTS.md](docs/DISCOUNTS.md) — mix-and-match (collection live; Admin click for ₹499)
+- [docs/SPEC_DIFF.md](docs/SPEC_DIFF.md) — HTML vs live computed-style gate (`node scripts/spec-diff.mjs`)

@@ -1,54 +1,75 @@
 # Build notes — Purelane homepage
 
 Dev store: `https://purelane-joazssp6.myshopify.com`  
-Password: sent separately in the submission email (not in this repo).  
-Theme: stock **Dawn 16.0.0** with custom Purelane sections. Horizon remains in the theme library unused.
+Password: sent only in the submission email (not in this repo).  
+Theme: stock **Dawn 16.0.0**, live theme **Purelane Dawn** `#190907154796`. Horizon `#190905745772` stays unpublished.
 
-## What I’d flag in the original file
+## What I’d flag about the original file
 
-- The shop grid **duplicates the same four products** with two different image techniques. We render eight unique live products instead.
-- Product “photos” are CSS `background-image` data-URIs and inline SVGs, not images. Bad for LCP, caching, and Shopify media.
+- Shop grid **duplicates the same four products** twice: first with CSS-background bottles, then with labelled inline SVGs. We render **eight unique live products** instead (the seed fixtures the brief asked for).
+- Product “photos” are CSS `background-image` data-URIs and empty `<span>`s. In Dawn, `div:empty { display: none }` and grid min-size collapse those spans to **0×0**, which is why shop cards went blank. Wrong for LCP, caching, and Shopify media.
 - Duplicate SVG `id`s (`cg`, `wf`, shop-card gradient ids) make the file invalid when more than one graphic is on the page.
-- `feTurbulence` water filters are expensive on main thread / GPU. We kept them because they are the mint/teal look of the file; they are disabled under `prefers-reduced-motion`.
-- Reveal animation uses `filter: blur()` which is a paint cost. Honoured, but disabled under `prefers-reduced-motion`.
+- Two stacked stylesheets: Version 1 (dark cinematic geometry) then Version 2 (mint ground, dark ink, teal buttons). Version 2 is what the file *renders*. Shipping V1 colours is a miss.
+- `feTurbulence` water and `filter: blur()` reveals are expensive. They *are* the look, so we kept them and kill them under `prefers-reduced-motion`.
 - Prices, ratings, and copy are hardcoded. A marketing team could not run this.
-- Marquee duplicates markup (correct pattern) but the duplicate set was not `aria-hidden`.
+- Marquee duplicates markup (correct pattern) but the clone set was not `aria-hidden`.
 - Global `*` reset and unscoped classes would collide with Dawn.
-- Google Fonts were render-blocking; we still load Outfit + Inter (required for the match) with `display=swap` and preconnect. Self-hosting woff2 is the next performance step.
+- Google Fonts are render-blocking. We still load Outfit + Inter (required for the match) with `display=swap` + preconnect, homepage only.
 
 ## What we changed in the code, and why
 
-- **Dawn, not Horizon.** New stores ship Horizon. The brief asked for stock Dawn so the review is of our sections, not Shopify’s new block framework. Dawn is pushed as a second theme and published.
-- **Scoped CSS** under `body.purelane-home`. Pixel values copied from the prototype (px, not Dawn rems).
-- **Real `<img>`** for bottles, with product featured media when present and theme SVG assets as fallback.
-- **Section schemas + blocks** for every string a merchant would want to change.
-- **Live product data** for titles, prices, compare-at, availability, and media.
-- **ATC** posts to `/cart/add.js` and updates the cart count.
-- **Theme editor survival:** JS listens for `shopify:section:load` / `unload`; empty states if products/blocks are removed; unique water SVG ids.
-- **Accessibility:** skip link kept, `:focus-visible` from the spec, marquee pauses on hover/focus, reduced-motion kills autoplay, parallax, ticker, and blur reveals.
-- **Combo cards** share `purelane-card-combo`; shop cards share `purelane-card-product`; prices share `purelane-price`.
+Visual output stays the file. The HTML/CSS underneath does not, where it was wrong for production.
 
-## QA (375px+ / editor / CWV)
+### Semantics, a11y, breakpoints
 
-Live theme **Purelane Dawn** `#190907154796`. Horizon `#190905745772` stays unpublished.
+- Landmarks: `h1` in hero, `h2` per section, cards as `<article>`. ATC is `<button type="button">`. Product titles are links.
+- Review marquee clone is `aria-hidden` on pass 2 only. Liquid `0` is truthy — do not pass `forloop.index0`.
+- `:focus-visible`, skip link, drawer `aria-expanded`. Marquee pauses on hover and `:focus-within`.
+- Reduced motion: no hero autoplay, ticker, marquee, blur reveals, or water parallax.
+- Breakpoints copied from the file (`900px` hero, `760px` type), not Dawn’s rem grid. Type stays px.
 
-Checked against the HTML spec and the password-gated storefront:
+### CSS that would not survive Dawn
 
-- Section order matches the file: hero → reviews → combos → bundles → shop (bonus sections omitted).
-- Hero padding `150px` / `132px` at 900px, tokens (`--ink #17102b`), glass, type, and reduced-motion CSS/JS.
-- First `theme push` ran **before** the catalog existed, so Shopify dropped `product` / `product_list` handles from `index.json`. `productCreate` also left `publishedAt` null (ACTIVE but not on the Online Store channel). Sections fall back to `all_products[handle]` when a picker is empty; seed now publishes via the 2023-10 `productUpdate(published: true)` mutation.
-- Reviews: duplicate marquee set is `aria-hidden` only on the second pass (`0` is truthy in Liquid — do not pass `index0`).
-- Shop fixtures: unique products (no prototype duplication), fabric conditioner has no image, magic eraser is sold out via `custom.sold_out`, long-title SKU is line-clamped to two lines. Variants use `inventoryPolicy: CONTINUE` because the CLI session cannot write inventory quantities.
-- Theme editor: `shopify:section:load` / `unload` tears down hero timers; atmosphere lives in the layout so reordering the five sections cannot kill the background.
-- CWV: no `feTurbulence`, no page-wide `backdrop-filter`, fonts `display=swap` + preconnect. Remaining cost is Google Fonts CSS (self-host next) and hero PNGs.
+- All rules scoped `body.purelane-home`. Geometry from V1, **Version 2 mint palette** written into those same selectors (an appended V2 blob loses to higher-specificity V1).
+- `body.purelane-home.gradient { background: transparent !important }` so Dawn scheme colour cannot paint the homepage.
+- Dawn `div:empty { display: none }` hid `.s1–.s4` and `.vig`. Forced `display: block` — without it the mint scenes never paint and the page stays lilac.
+- Shop bottles are real `<img src="{{ 'p-tap.svg' | asset_url }}">` via `purelane-pimg`. CSS-background spans look like the file in isolation and disappear in Dawn.
 
-Automatic mix-and-match discounts were **not** created (CLI session has no discounts scope). Offer products `build-a-box-2/3/5` carry the tier prices; merchants can add Buy X → ₹Y in **Discounts**.
+### Data (not Liquid hardcoding)
+
+- Shop / combos: live products, prices, compare-at, inventory, metafields.
+- Bundles: offer products `build-a-box-2/3/5` as the price source; feature lists in editor blocks.
+- Reviews: theme-editor blocks. Metaobject `review` is defined for later.
+- Every string a marketer would change is in section schema.
+
+### Reuse
+
+`purelane-card-product`, `purelane-card-combo`, `purelane-card-tier`, `purelane-card-review`, shared `purelane-price` / `purelane-money`.
+
+### Theme editor
+
+`purelane.js` inits per root and listens for `shopify:section:load` / `unload`. Atmosphere lives in the layout, so reordering the five sections cannot kill the water. Empty product pickers fall back to `all_products[handle]` (empty product drops are truthy — we check `.handle`).
+
+### Seed fixtures the brief asked for
+
+- Eight+ singles plus combos and offer products.
+- **Sold out:** Magic Eraser (`custom.sold_out`) — inventory CLI cannot write quantities.
+- **No image:** Fabric conditioner has no featured media and no bottle mapping. The card still has title, price, and ATC; the shot is a dashed “No image” well so it reads as a fixture, not a broken image.
+- **Long title:** descaler tablets, line-clamped to two lines.
+
+### Performance
+
+Kept (they are the look): `feTurbulence`, glass `backdrop-filter`, Outfit + Inter.  
+Changed: reduced-motion kill-switch; fonts `display=swap` + preconnect, index-only CSS/JS; lazy product `<img>`.  
+Still expensive: turbulence + backdrop-filter + Google Fonts CSS. Self-host woff2 next.
+
+## QA
+
+Checked against the HTML (Version 2) at 1440 and 375: mint ground, white-on-green waves, frosted white glass, teal Shop Now, dark navy type. Gate: `node scripts/spec-diff.mjs` → [SPEC_DIFF.md](SPEC_DIFF.md).
 
 ## Gaps / what I’d do with more time
 
-- Seed product PNGs and metafields through a custom app token (script is in `scripts/seed-catalog.mjs`) and wire collection-level automatic discounts for mix-and-match.
-- Self-host Outfit/Inter as woff2; convert remaining SVG bottles to WebP.
-- Add the bonus prototype sections (ingredients, proof, range, footer, sticky CTA) on the same tokens.
-- Keyboard-operable combo rail (prev/next buttons) in addition to swipe.
-- Visual regression screenshots at 375 / 768 / 1180 against the HTML file.
-- Storefront password page styled to match (currently Dawn’s password template).
+- **Discounts:** collection `build-a-box` is live. CLI has no `write_discounts`. One Admin click creates “Any 3 for ₹499” — see [DISCOUNTS.md](DISCOUNTS.md). Exclusive 2/3/5 tiers need a Discount Function.
+- Keyboard prev/next on the combo rail (swipe works today).
+- Self-host Outfit/Inter as woff2; convert bottles to WebP.
+- Theme-editor Loom and password page styled to match.
