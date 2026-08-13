@@ -1,0 +1,73 @@
+<footer class="pl-footer" data-scene="4">
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fcol">
+        <a class="brand" href="#top" style="margin-bottom:16px">
+          <span class="mark">{% render 'purelane-icon', icon: 'leaf' %}</span>
+          <span class="txt">
+            <span class="n1">{{ section.settings.logo_text }}</span>
+            <span class="n2">{{ section.settings.tagline }}</span>
+          </span>
+        </a>
+        <p style="max-width:30ch">{{ section.settings.blurb }}</p>
+      </div>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'column' -%}
+          <div class="fcol" {{ block.shopify_attributes }}>
+            <h5>{{ block.settings.heading }}</h5>
+            {%- assign lines = block.settings.links | newline_to_br | split: '<br />' -%}
+            {%- for line in lines -%}
+              {%- assign parts = line | split: '|' -%}
+              {%- if parts.size >= 2 -%}
+                <a href="{{ parts[1] | strip }}">{{ parts[0] | strip }}</a>
+              {%- elsif line != blank -%}
+                <p>{{ line | strip }}</p>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <div class="fbot">
+      <span>{{ section.settings.legal }}</span>
+      <span>{{ section.settings.fineprint }}</span>
+    </div>
+  </div>
+</footer>
+<div class="sticky">
+  <span class="lbl">
+    <b>{{ section.settings.sticky_title }}</b>
+    <span>{{ section.settings.sticky_note }}</span>
+  </span>
+  <a class="btn btn-primary btn-sm" href="{{ section.settings.sticky_link | default: '#bundles' }}">{{ section.settings.sticky_cta }}</a>
+</div>
+
+{% schema %}
+{
+  "name": "Purelane footer",
+  "tag": "div",
+  "class": "purelane-footer-section",
+  "settings": [
+    { "type": "text", "id": "logo_text", "label": "Brand", "default": "Purelane" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Clean, simply" },
+    { "type": "textarea", "id": "blurb", "label": "Blurb", "default": "Effective cleaning, powered by nature. Made for Indian homes since day one." },
+    { "type": "text", "id": "legal", "label": "Copyright", "default": "© 2026 Purelane Eco Products Private Limited" },
+    { "type": "text", "id": "fineprint", "label": "Fine print", "default": "Privacy · Terms · Refunds · Contact" },
+    { "type": "text", "id": "sticky_title", "label": "Sticky title", "default": "Pick any 3, pay ₹499" },
+    { "type": "text", "id": "sticky_note", "label": "Sticky note", "default": "Free shipping, always" },
+    { "type": "text", "id": "sticky_cta", "label": "Sticky button", "default": "Build bundle" },
+    { "type": "url", "id": "sticky_link", "label": "Sticky link" }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
+        { "type": "textarea", "id": "links", "label": "Links (Label|#anchor per line)", "default": "Bestsellers|#shop\nKitchen|#shop\nLaundry|#shop" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Purelane footer" }]
+}
+{% endschema %}

@@ -115,7 +115,7 @@
         "cta_primary_label": "Shop now",
         "cta_primary_link": "#shop",
         "cta_secondary_label": "How it works",
-        "cta_secondary_link": "#combos"
+        "cta_secondary_link": "#how"
       }
     },
     "purelane_reviews": {
@@ -285,14 +285,177 @@
           "magic-eraser"
         ]
       }
+    },
+    "purelane_ingredients": {
+      "type": "purelane-ingredients",
+      "blocks": {
+        "i1": { "type": "ingredient", "settings": { "art": "coconut", "title": "Coconut", "text": "Plant-derived cleansers that lift grease" } },
+        "i2": { "type": "ingredient", "settings": { "art": "orange", "title": "Orange peel", "text": "Natural degreaser and fresh citrus lift" } },
+        "i3": { "type": "ingredient", "settings": { "art": "soapnut", "title": "Soap nut", "text": "A traditional plant foaming agent" } },
+        "i4": { "type": "ingredient", "settings": { "art": "neem", "title": "Neem", "text": "Time-tested antibacterial from the tree" } },
+        "i5": { "type": "ingredient", "settings": { "art": "lemongrass", "title": "Lemongrass", "text": "Clean fragrance with nothing synthetic" } }
+      },
+      "block_order": ["i1", "i2", "i3", "i4", "i5"],
+      "settings": { "heading": "Sourced from nature" }
+    },
+    "purelane_pillars": {
+      "type": "purelane-pillars",
+      "blocks": {
+        "p1": { "type": "pillar", "settings": { "icon": "bubbles", "title": "Less scrubbing", "text": "A foaming formulation. The foam clings to grease and lifts it, so you wipe instead of scrub.", "cta_label": "Learn more", "cta_link": "#shop" } },
+        "p2": { "type": "pillar", "settings": { "icon": "shield", "title": "Clean ingredients", "text": "No sulphates, no chlorine, no synthetic fragrance. Nothing on the label you would not want near your food.", "cta_label": "Learn more", "cta_link": "#ingredients" } },
+        "p3": { "type": "pillar", "settings": { "icon": "heart", "title": "Safe around everyone", "text": "Gentle on hands, safe around kids and pets, and it leaves no toxic residue on the surfaces you touch every day.", "cta_label": "Learn more", "cta_link": "#proof" } }
+      },
+      "block_order": ["p1", "p2", "p3"],
+      "settings": {}
+    },
+    "purelane_proof": {
+      "type": "purelane-proof",
+      "blocks": {
+        "s1": { "type": "slide", "settings": { "art": "p-kitchen", "name": "Kitchen cleaner", "note": "Foam lifts grease, no scrubbing" } },
+        "s2": { "type": "slide", "settings": { "art": "p-tap", "name": "Tap & limescale", "note": "Melts hard water stains" } },
+        "s3": { "type": "slide", "settings": { "art": "p-laundry", "name": "Laundry detergent", "note": "Tough on odour, soft on fabric" } },
+        "s4": { "type": "slide", "settings": { "art": "p-toilet", "name": "Toilet cleaner", "note": "Kills 99.9% of germs" } },
+        "s5": { "type": "slide", "settings": { "art": "p-floor", "name": "Floor cleaner", "note": "Neem powered, pet safe" } },
+        "s6": { "type": "slide", "settings": { "art": "p-dish", "name": "Dishwash gel", "note": "Cuts grease, kind to hands" } },
+        "st1": { "type": "stat", "settings": { "value": "99.9%", "title": "Germ kill", "text": "Tested against germs and bacteria" } },
+        "st2": { "type": "stat", "settings": { "value": "0%", "title": "Sulphates", "text": "No SLS, chlorine or parabens" } },
+        "st3": { "type": "stat", "settings": { "value": "100%", "title": "Plant based", "text": "Cleansers derived from plants" } },
+        "st4": { "type": "stat", "settings": { "value": "4.8", "title": "Rated", "text": "Across 8,000+ verified reviews" } }
+      },
+      "block_order": ["s1", "s2", "s3", "s4", "s5", "s6", "st1", "st2", "st3", "st4"],
+      "settings": {
+        "kicker": "Why it works",
+        "heading": "Tough on grime.\nGentle on everything else.",
+        "lede": "Every formula is built on plant-derived cleansers and essential oils. It behaves exactly like the cleaner you are used to, minus the things you never signed up for.",
+        "cta_label": "See the ingredient list",
+        "cta_link": "#ingredients"
+      }
+    },
+    "purelane_range": {
+      "type": "purelane-range",
+      "blocks": {
+        "b1": { "type": "bottle", "settings": { "art": "p-floor", "label": "Floor cleaner" } },
+        "b2": { "type": "bottle", "settings": { "art": "p-tap", "label": "Tap cleaner" } },
+        "b3": { "type": "bottle", "settings": { "art": "p-kitchen", "label": "Kitchen cleaner" } },
+        "b4": { "type": "bottle", "settings": { "art": "p-toilet", "label": "Toilet cleaner" } },
+        "b5": { "type": "bottle", "settings": { "art": "p-laundry", "label": "Laundry detergent" } },
+        "b6": { "type": "bottle", "settings": { "art": "p-dish", "label": "Dishwash gel" } },
+        "b7": { "type": "bottle", "settings": { "art": "p-metal", "label": "Metal cleaner" } },
+        "b8": { "type": "bottle", "settings": { "art": "p-wm", "label": "Washing machine cleaner" } },
+        "b9": { "type": "bottle", "settings": { "art": "p-handwash", "label": "Handwash" } },
+        "b10": { "type": "bottle", "settings": { "art": "p-eraser", "label": "Magic eraser" } }
+      },
+      "block_order": ["b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b10"],
+      "settings": {
+        "kicker": "The full range",
+        "heading": "Every room, one shelf",
+        "lede": "Floors, taps, kitchen, laundry, bathroom and hands. Fourteen plant-based formulas that replace every harsh bottle under your sink.",
+        "hint": "Swipe to see the full shelf"
+      }
+    },
+    "purelane_why": {
+      "type": "purelane-why",
+      "blocks": {
+        "w1": { "type": "point", "settings": { "icon": "dollar", "title": "Save up to 45%", "text": "Versus buying the same products separately" } },
+        "w2": { "type": "point", "settings": { "icon": "check-box", "title": "One flat price", "text": "No calculators, no comparing carts" } },
+        "w3": { "type": "point", "settings": { "icon": "star-outline", "title": "Curated by experts", "text": "Products picked to work well together" } },
+        "w4": { "type": "point", "settings": { "icon": "truck", "title": "Free shipping always", "text": "Included on every bundle, all India" } }
+      },
+      "block_order": ["w1", "w2", "w3", "w4"],
+      "settings": {
+        "kicker": "The smarter way to shop",
+        "heading": "Why bundles beat buying single"
+      }
+    },
+    "purelane_categories": {
+      "type": "purelane-categories",
+      "blocks": {
+        "c1": { "type": "category", "settings": { "art": "p-kitchen", "title": "Kitchen bundle", "text": "Grease, dishes & more", "link": "#combos" } },
+        "c2": { "type": "category", "settings": { "art": "p-toilet", "title": "Bathroom bundle", "text": "Deep clean & disinfect", "link": "#combos" } },
+        "c3": { "type": "category", "settings": { "art": "p-laundry", "title": "Laundry bundle", "text": "Softer, fresher wash", "link": "#combos" } },
+        "c4": { "type": "category", "settings": { "art": "p-tap", "title": "Hard water bundle", "text": "Melt away limescale", "link": "#combos" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4"],
+      "settings": {
+        "kicker": "Bundle categories",
+        "heading": "Find the right bundle for you"
+      }
+    },
+    "purelane_trust": {
+      "type": "purelane-trust",
+      "blocks": {
+        "t1": { "type": "item", "settings": { "icon": "leaf", "label": "Plant derived\nformulas" } },
+        "t2": { "type": "item", "settings": { "icon": "box", "label": "Recyclable\npackaging" } },
+        "t3": { "type": "item", "settings": { "icon": "heart", "label": "Safe for\nkids & pets" } },
+        "t4": { "type": "item", "settings": { "icon": "globe", "label": "Made in\nIndia" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4"],
+      "settings": {}
+    },
+    "purelane_signup": {
+      "type": "purelane-signup",
+      "settings": {
+        "kicker": "Join the Purelane Club",
+        "heading": "Get ₹100 off your first bundle",
+        "lede": "Plus first access to new launches and restocks.",
+        "placeholder": "your@email.com",
+        "cta_label": "Get my ₹100 off"
+      }
+    },
+    "purelane_footer": {
+      "type": "purelane-footer",
+      "blocks": {
+        "shop": {
+          "type": "column",
+          "settings": {
+            "heading": "Shop",
+            "links": "Bestsellers|#shop\nKitchen|#shop\nLaundry|#shop\nHome|#shop\nSkin|#shop\nStarter kits|#bundles"
+          }
+        },
+        "about": {
+          "type": "column",
+          "settings": {
+            "heading": "About",
+            "links": "How it works|#how\nSustainability|#ingredients\nFAQs|#proof\nReviews|#reviews"
+          }
+        },
+        "touch": {
+          "type": "column",
+          "settings": {
+            "heading": "Get in touch",
+            "links": "hello@purelane.com|mailto:hello@purelane.com\n+91 9930 123 234|tel:+919930123234"
+          }
+        }
+      },
+      "block_order": ["shop", "about", "touch"],
+      "settings": {
+        "logo_text": "Purelane",
+        "tagline": "Clean, simply",
+        "blurb": "Effective cleaning, powered by nature. Made for Indian homes since day one.",
+        "legal": "© 2026 Purelane Eco Products Private Limited",
+        "fineprint": "Privacy · Terms · Refunds · Contact",
+        "sticky_title": "Pick any 3, pay ₹499",
+        "sticky_note": "Free shipping, always",
+        "sticky_cta": "Build bundle",
+        "sticky_link": "#bundles"
+      }
     }
   },
   "order": [
     "purelane_header",
     "purelane_hero",
     "purelane_reviews",
+    "purelane_ingredients",
+    "purelane_pillars",
+    "purelane_proof",
     "purelane_combos",
     "purelane_bundles",
-    "purelane_shop"
+    "purelane_shop",
+    "purelane_range",
+    "purelane_why",
+    "purelane_categories",
+    "purelane_trust",
+    "purelane_signup",
+    "purelane_footer"
   ]
 }

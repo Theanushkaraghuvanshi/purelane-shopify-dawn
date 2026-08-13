@@ -1,0 +1,108 @@
+<section class="sec" id="proof" data-scene="3">
+  <div class="wrap">
+    <div class="glass sec-pad rv">
+      <div class="proof">
+        <div class="proof-l">
+          {%- if section.settings.kicker != blank -%}
+            <span class="kicker">{{ section.settings.kicker }}</span>
+          {%- endif -%}
+          <h2 class="d2" style="margin-top:12px">{{ section.settings.heading | newline_to_br }}</h2>
+          <p class="body-s" style="max-width:40ch">{{ section.settings.lede }}</p>
+          {%- if section.settings.cta_label != blank -%}
+            <a class="btn btn-primary" href="{{ section.settings.cta_link | default: '#ingredients' }}">
+              {{ section.settings.cta_label }}
+              {% render 'purelane-icon', icon: 'arrow' %}
+            </a>
+          {%- endif -%}
+        </div>
+        {%- assign slides = section.blocks | where: 'type', 'slide' -%}
+        {%- if slides.size > 0 -%}
+          <div class="glass-2 rot" data-pl-rot aria-hidden="true">
+            <div class="frame">
+              {%- for block in slides -%}
+                <span
+                  class="pimg {{ block.settings.art }}{% if forloop.first %} on{% endif %}"
+                  role="img"
+                  aria-label="{{ block.settings.name | escape }}"
+                  data-name="{{ block.settings.name | escape }}"
+                  data-note="{{ block.settings.note | escape }}"
+                ></span>
+              {%- endfor -%}
+            </div>
+            {%- assign first = slides.first -%}
+            <div class="cap">
+              <b>{{ first.settings.name }}</b>
+              <span>{{ first.settings.note }}</span>
+            </div>
+            <div class="dots">
+              {%- for block in slides -%}
+                <i{% if forloop.first %} class="on"{% endif %}></i>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+        {%- assign stats = section.blocks | where: 'type', 'stat' -%}
+        {%- if stats.size > 0 -%}
+          <div class="glass-2 stats proof-stats" style="grid-column:1/-1">
+            {%- for block in stats -%}
+              <div class="stat" {{ block.shopify_attributes }}>
+                <div class="ring">{{ block.settings.value }}</div>
+                <h5>{{ block.settings.title }}</h5>
+                <p>{{ block.settings.text }}</p>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Purelane proof",
+  "tag": "div",
+  "class": "purelane-proof-section",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Why it works" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Tough on grime.\nGentle on everything else." },
+    { "type": "textarea", "id": "lede", "label": "Body", "default": "Every formula is built on plant-derived cleansers and essential oils. It behaves exactly like the cleaner you are used to, minus the things you never signed up for." },
+    { "type": "text", "id": "cta_label", "label": "Button", "default": "See the ingredient list" },
+    { "type": "url", "id": "cta_link", "label": "Link" }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Rotator slide",
+      "settings": [
+        {
+          "type": "select",
+          "id": "art",
+          "label": "Bottle",
+          "options": [
+            { "value": "p-kitchen", "label": "Kitchen" },
+            { "value": "p-tap", "label": "Tap" },
+            { "value": "p-laundry", "label": "Laundry" },
+            { "value": "p-toilet", "label": "Toilet" },
+            { "value": "p-floor", "label": "Floor" },
+            { "value": "p-dish", "label": "Dishwash" }
+          ],
+          "default": "p-kitchen"
+        },
+        { "type": "text", "id": "name", "label": "Name", "default": "Kitchen cleaner" },
+        { "type": "text", "id": "note", "label": "Note", "default": "Foam lifts grease, no scrubbing" }
+      ]
+    },
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "99.9%" },
+        { "type": "text", "id": "title", "label": "Label", "default": "Germ kill" },
+        { "type": "text", "id": "text", "label": "Caption", "default": "Tested against germs and bacteria" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Purelane proof" }]
+}
+{% endschema %}
