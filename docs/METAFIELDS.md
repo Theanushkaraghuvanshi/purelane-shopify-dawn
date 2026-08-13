@@ -42,6 +42,6 @@ Tiers “any 2 / 3 / 5” are not a native product field. They are represented a
 1. Offer products `build-a-box-2`, `build-a-box-3`, `build-a-box-5` (price + compare-at live on the product).
 2. Theme editor blocks that pick those products plus a feature list.
 3. Collection **Build a box** (`build-a-box`, id `643107619180`) containing every single SKU.
-4. Automatic discount **Any 3 for ₹499** — CLI cannot write discounts; exact Admin steps in [DISCOUNTS.md](DISCOUNTS.md).
+4. Automatic discount **Any 3 for ₹499** — CLI cannot write discounts. Must be **Automatic + fixed ₹101 + collection Build a box + minimum qty 3** (not a percentage code). Exact Admin steps in [DISCOUNTS.md](DISCOUNTS.md).
 
 CTAs scroll to `#shop` so the marketing team can change the offer without a developer.

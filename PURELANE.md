@@ -27,3 +27,4 @@ Seed catalog: import `seed/products.csv` in **Products → Import**, then set me
 - [docs/METAFIELDS.md](docs/METAFIELDS.md) — custom data
 - [docs/DISCOUNTS.md](docs/DISCOUNTS.md) — mix-and-match (collection live; Admin click for ₹499)
 - [docs/SPEC_DIFF.md](docs/SPEC_DIFF.md) — HTML vs live computed-style gate (`node scripts/spec-diff.mjs`)
+- [docs/SUBMISSION_EMAIL.md](docs/SUBMISSION_EMAIL.md) — email to nj@troopod.io

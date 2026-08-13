@@ -23,6 +23,9 @@ This build was done in Cursor with an agent (Composer). That is how I normally w
 - **Zero inventory = every card sold out.** `inventoryPolicy: CONTINUE` plus `custom.sold_out` on Magic Eraser.
 - **`write_discounts` denied** on the CLI session. Collection `build-a-box` was created; the ₹499 automatic discount still needs one Admin click.
 - Pixel match still needs a human eye at 375px. Agents are confident and wrong about spacing.
+- **Empty `<a>` rail dots.** Same Dawn `:empty` trap as the mint scenes. Computed `display:flex` with a 0×0 rect. A screenshot of the live site is the check, not `getComputedStyle`.
+- **Storefront `available: false` while Admin `availableForSale: true`.** Inventory policy CONTINUE was not enough: the shop only ships to the US and the visitor is in India. Cart add 422 “already sold out”. The agent trusted Admin GraphQL.
+- **Cart badge.** Writing `item_count` on add, never on remove or `pageshow`, left a stale “3” after the cart was emptied.
 
 ## What I’d systematise for twenty more of these
 

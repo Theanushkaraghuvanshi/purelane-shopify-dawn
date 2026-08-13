@@ -5,6 +5,29 @@
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
+  function cartJsonUrl(path) {
+    if (!path) return '';
+    return path.endsWith('.js') ? path : path + '.js';
+  }
+
+  function setCartCount(n) {
+    const count = Number(n) || 0;
+    document.querySelectorAll('[data-pl-cart-count]').forEach((el) => {
+      el.textContent = count > 0 ? String(count) : '';
+    });
+  }
+
+  async function refreshCartCount() {
+    if (!window.routes || !window.routes.cart_url) return null;
+    try {
+      const cart = await fetch(cartJsonUrl(window.routes.cart_url), { cache: 'no-store' }).then((r) => r.json());
+      setCartCount(cart.item_count);
+      return cart;
+    } catch (_) {
+      return null;
+    }
+  }
+
   function initReveal(root) {
     const revs = root.querySelectorAll('.rv:not(.in)');
     if (!revs.length) return;
@@ -224,19 +247,29 @@
       button.textContent = 'Adding…';
     }
     try {
-      const res = await fetch(window.routes.cart_add_url + '.js', {
+      const addUrl = window.routes.cart_add_url.endsWith('.js')
+        ? window.routes.cart_add_url
+        : window.routes.cart_add_url + '.js';
+      const res = await fetch(addUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
         body: JSON.stringify({ items: [{ id: Number(variantId), quantity: 1 }] }),
       });
-      if (!res.ok) throw new Error('add failed');
-      const cart = await fetch(window.routes.cart_url + '.js').then((r) => r.json());
-      document.querySelectorAll('[data-pl-cart-count]').forEach((el) => {
-        el.textContent = String(cart.item_count || 0);
-      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.status) {
+        throw new Error(data.description || data.message || 'add failed');
+      }
+      const cart = await fetch(cartJsonUrl(window.routes.cart_url), { cache: 'no-store' }).then((r) => r.json());
+      setCartCount(cart.item_count);
       if (typeof publish === 'function') {
         publish('cart-update', { source: 'purelane', cartData: cart });
       }
+      const drawer = document.querySelector('cart-drawer');
+      if (drawer && typeof drawer.open === 'function') drawer.open();
       if (button) button.textContent = 'Added';
     } catch (err) {
       if (button) button.textContent = 'Try again';
@@ -324,6 +357,19 @@
     const { headerBits } = boot(document);
     const prod = document.querySelector('[data-pl-hero-prod]');
     initParallax(headerBits && headerBits.hdr, prod);
+    refreshCartCount();
+    window.addEventListener('pageshow', refreshCartCount);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') refreshCartCount();
+    });
+    if (typeof subscribe === 'function') {
+      const topic = (window.PUB_SUB_EVENTS && window.PUB_SUB_EVENTS.cartUpdate) || 'cart-update';
+      subscribe(topic, (event) => {
+        const n = event && event.cartData && event.cartData.item_count;
+        if (typeof n === 'number') setCartCount(n);
+        else refreshCartCount();
+      });
+    }
   }
 
   if (document.readyState === 'loading') {

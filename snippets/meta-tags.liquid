@@ -3,6 +3,10 @@
   assign og_url = canonical_url | default: request.origin
   assign og_type = 'website'
   assign og_description = page_description | default: shop.description | default: shop.name
+  if template.name == 'index'
+    assign og_title = 'Purelane — Plant-based homecare'
+    assign og_description = 'Plant-based homecare for kitchen, laundry, bathroom and hands. Free shipping across India.'
+  endif
 
   if request.page_type == 'product'
     assign og_type = 'product'

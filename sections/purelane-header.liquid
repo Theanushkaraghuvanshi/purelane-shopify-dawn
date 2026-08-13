@@ -43,7 +43,7 @@
       <a class="ico hide-s" href="{{ routes.account_url }}" aria-label="Account">{% render 'purelane-icon', icon: 'account' %}</a>
       <a class="ico" href="{{ routes.cart_url }}" id="cart-icon-bubble" aria-label="Cart">
         {% render 'purelane-icon', icon: 'cart' %}
-        <span class="dot" data-pl-cart-count>{{ cart.item_count }}</span>
+        <span class="dot" data-pl-cart-count>{% if cart.item_count > 0 %}{{ cart.item_count }}{% endif %}</span>
       </a>
       <button class="ico burger" type="button" data-pl-burger aria-label="Menu" aria-expanded="false">
         {% render 'purelane-icon', icon: 'menu' %}

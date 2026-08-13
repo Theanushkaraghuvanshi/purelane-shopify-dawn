@@ -73,3 +73,11 @@ Checked against the HTML (Version 2) at 1440 and 375: mint ground, white-on-gree
 - Keyboard prev/next on the combo rail (swipe works today).
 - Self-host Outfit/Inter as woff2; convert bottles to WebP.
 - Theme-editor Loom and password page styled to match.
+- India shipping zone. The Partner store’s only market ships to **US**; the storefront country is **IN**, so `/cart/add` returned 422 “sold out” until variants were untracked and set `requiresShipping: false`. Proper fix is Settings → Shipping (and Markets) → India.
+- Exclusive 2/3/5 mix-and-match as a Discount Function, not stacked automatic minimums.
+
+## Production fixes after first live pass
+
+- Dawn `a:empty { display: none }` collapsed the side rail to 0×0. Links now contain a span; `.rail a { display: block }`.
+- Homepage `<title>` is `Purelane — Plant-based homecare` (the HTML file). Shopify was serving shop name only.
+- Cart badge reads `cart.js` on load / pageshow / visibility, and hides when empty, so emptying the cart no longer leaves a stale count.
