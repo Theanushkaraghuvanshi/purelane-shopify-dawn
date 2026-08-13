@@ -28,6 +28,22 @@ Theme: stock **Dawn 16.0.0** with custom Purelane sections. Horizon remains in t
 - **Accessibility:** skip link kept, `:focus-visible` from the spec, marquee pauses on hover/focus, reduced-motion kills autoplay, parallax, ticker, and blur reveals.
 - **Combo cards** share `purelane-card-combo`; shop cards share `purelane-card-product`; prices share `purelane-price`.
 
+## QA (375px+ / editor / CWV)
+
+Live theme **Purelane Dawn** `#190907154796`. Horizon `#190905745772` stays unpublished.
+
+Checked against the HTML spec and the password-gated storefront:
+
+- Section order matches the file: hero → reviews → combos → bundles → shop (bonus sections omitted).
+- Hero padding `150px` / `132px` at 900px, tokens (`--ink #17102b`), glass, type, and reduced-motion CSS/JS.
+- First `theme push` ran **before** the catalog existed, so Shopify dropped `product` / `product_list` handles from `index.json`. Sections now fall back to `all_products[handle]` when a picker is empty, and always render hero bottles (product media or theme SVG).
+- Reviews: duplicate marquee set is `aria-hidden` only on the second pass (`0` is truthy in Liquid — do not pass `index0`).
+- Shop fixtures: unique products (no prototype duplication), fabric conditioner has no image, magic eraser is sold out via `custom.sold_out`, long-title SKU is line-clamped to two lines.
+- Theme editor: `shopify:section:load` / `unload` tears down hero timers; atmosphere lives in the layout so reordering the five sections cannot kill the background.
+- CWV: no `feTurbulence`, no page-wide `backdrop-filter`, fonts `display=swap` + preconnect. Remaining cost is Google Fonts CSS (self-host next) and hero PNGs.
+
+Automatic mix-and-match discounts were **not** created (CLI session has no discounts scope). Offer products `build-a-box-2/3/5` carry the tier prices; merchants can add Buy X → ₹Y in **Discounts**.
+
 ## Gaps / what I’d do with more time
 
 - Seed product PNGs and metafields through a custom app token (script is in `scripts/seed-catalog.mjs`) and wire collection-level automatic discounts for mix-and-match.

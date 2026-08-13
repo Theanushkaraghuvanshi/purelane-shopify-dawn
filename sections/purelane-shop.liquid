@@ -11,14 +11,37 @@
         <i></i>
       </div>
     </div>
-    {%- if section.settings.products != blank -%}
-      <div class="shelf">
-        {%- for product in section.settings.products -%}
-          {%- capture delay -%}rv-d{{ forloop.index | minus: 1 | modulo: 4 }}{%- endcapture -%}
-          {% render 'purelane-card-product', product: product, delay_class: delay %}
+    {%- liquid
+      assign picked = section.settings.products
+      assign has_picked = false
+      if picked != blank
+        for product in picked
+          if product.handle != blank
+            assign has_picked = true
+          endif
+        endfor
+      endif
+    -%}
+    <div class="shelf">
+      {%- if has_picked -%}
+        {%- for product in picked -%}
+          {%- if product.handle != blank -%}
+            {%- capture delay -%}rv-d{{ forloop.index | minus: 1 | modulo: 4 }}{%- endcapture -%}
+            {% render 'purelane-card-product', product: product, delay_class: delay %}
+          {%- endif -%}
         {%- endfor -%}
-      </div>
-    {%- else -%}
+      {%- else -%}
+        {%- assign handles = 'tap-cleaner-limescale-remover,kitchen-cleaner-foaming,copper-bronze-brass-cleaner,washing-machine-cleaner-descaler,dishwash-gel,fabric-conditioner,plant-based-concentrated-washing-machine-cleaner-and-hard-water-descaler-tablets-for-front-load-and-top-load-machines,magic-eraser' | split: ',' -%}
+        {%- for handle in handles -%}
+          {%- assign product = all_products[handle] -%}
+          {%- if product.handle != blank -%}
+            {%- capture delay -%}rv-d{{ forloop.index | minus: 1 | modulo: 4 }}{%- endcapture -%}
+            {% render 'purelane-card-product', product: product, delay_class: delay %}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+    {%- if has_picked == false and all_products['tap-cleaner-limescale-remover'].handle == blank -%}
       <p class="pl-empty">Choose products in the theme editor. Cards use live titles, prices, and inventory.</p>
     {%- endif -%}
   </div>

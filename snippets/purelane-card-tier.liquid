@@ -4,8 +4,17 @@
 {%- liquid
   assign product = block.settings.product
   assign qty = block.settings.quantity
+  if product.handle == blank
+    if qty == 2
+      assign product = all_products['build-a-box-2']
+    elsif qty == 3
+      assign product = all_products['build-a-box-3']
+    elsif qty == 5
+      assign product = all_products['build-a-box-5']
+    endif
+  endif
   assign highlight = block.settings.highlight
-  assign features = block.settings.features | split: '\n'
+  assign features = block.settings.features | newline_to_br | split: '<br />'
   assign images = block.settings.products
 -%}
 <article class="glass tier{% if highlight %} best{% endif %} rv{% if highlight %} rv-d2{% endif %}" {{ block.shopify_attributes }}>
@@ -43,7 +52,7 @@
     {{ qty }}<small>{{ block.settings.quantity_label | default: 'Products' }}</small>
   </div>
   <div class="price">
-    {%- if product -%}
+    {%- if product.handle != blank and product.price > 0 -%}
       {{ product.price | money_without_trailing_zeros }}
       {%- if product.compare_at_price > product.price -%}
         <s>{{ product.compare_at_price | money_without_trailing_zeros }}</s>

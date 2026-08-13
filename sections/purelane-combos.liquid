@@ -14,23 +14,44 @@
         <p class="lede" style="margin:14px auto 0">{{ section.settings.lede }}</p>
       {%- endif -%}
     </div>
-    {%- if section.settings.products != blank -%}
+    {%- liquid
+      assign picked = section.settings.products
+      assign has_picked = false
+      if picked != blank
+        for product in picked
+          if product.handle != blank
+            assign has_picked = true
+          endif
+        endfor
+      endif
+    -%}
+    {%- if has_picked -%}
       <div class="comborail rv">
-        {%- for product in section.settings.products -%}
-          {% render 'purelane-card-combo', product: product %}
+        {%- for product in picked -%}
+          {%- if product.handle != blank -%}
+            {% render 'purelane-card-combo', product: product %}
+          {%- endif -%}
         {%- endfor -%}
       </div>
-      {%- if section.settings.swipe_label != blank -%}
-        <div class="swipecue" aria-hidden="true">
-          {% render 'purelane-icon', icon: 'arrow' %}
-          {{ section.settings.swipe_label }}
-        </div>
-      {%- endif -%}
-      {%- if section.settings.footnote != blank -%}
-        <p class="railnote">{{ section.settings.footnote }}</p>
-      {%- endif -%}
     {%- else -%}
-      <p class="pl-empty">Select combo products. Each combo should list component products in the Components metafield.</p>
+      {%- assign handles = 'kitchen-essentials,laundry-care-bundle,complete-home-bundle,bathroom-deep-clean,hard-water-solution-kit' | split: ',' -%}
+      <div class="comborail rv">
+        {%- for handle in handles -%}
+          {%- assign product = all_products[handle] -%}
+          {%- if product.handle != blank -%}
+            {% render 'purelane-card-combo', product: product %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+    {%- if section.settings.swipe_label != blank -%}
+      <div class="swipecue" aria-hidden="true">
+        {% render 'purelane-icon', icon: 'arrow' %}
+        {{ section.settings.swipe_label }}
+      </div>
+    {%- endif -%}
+    {%- if section.settings.footnote != blank -%}
+      <p class="railnote">{{ section.settings.footnote }}</p>
     {%- endif -%}
   </div>
 </section>

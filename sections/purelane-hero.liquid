@@ -64,32 +64,45 @@
           {%- for block in slides -%}
             {%- assign style = block.settings.style -%}
             <div class="hslide hs{{ style }}{% if forloop.first %} on{% endif %}" data-n="{{ forloop.index }}" {{ block.shopify_attributes }}>
-              {%- if block.settings.product_1 != blank -%}
-                {%- assign p = block.settings.product_1 -%}
-                <img
-                  class="hp a d1"
-                  src="{% if p.featured_image %}{{ p.featured_image | image_url: width: 900 }}{% else %}{{ 'p-kbtl.svg' | asset_url }}{% endif %}"
-                  alt="{{ p.title | escape }}"
-                  width="380"
-                  height="1177"
-                >
-              {%- endif -%}
-              {%- if style != '1' and block.settings.product_2 != blank -%}
-                {%- assign p = block.settings.product_2 -%}
+              {%- liquid
+                assign p1 = block.settings.product_1
+                assign p2 = block.settings.product_2
+                assign p3 = block.settings.product_3
+                if p1.handle == blank
+                  if style == '1'
+                    assign p1 = all_products['kitchen-cleaner-foaming']
+                  else
+                    assign p1 = all_products['tap-cleaner-limescale-remover']
+                  endif
+                endif
+                if p2.handle == blank
+                  assign p2 = all_products['kitchen-cleaner-foaming']
+                endif
+                if p3.handle == blank
+                  assign p3 = all_products['copper-bronze-brass-cleaner']
+                endif
+              -%}
+              <img
+                class="hp a d1"
+                src="{% if p1.featured_image %}{{ p1.featured_image | image_url: width: 900 }}{% elsif style == '1' %}{{ 'p-kbtl.svg' | asset_url }}{% else %}{{ 'p-tbtl.svg' | asset_url }}{% endif %}"
+                alt="{{ p1.title | default: block.settings.label | escape }}"
+                width="380"
+                height="1177"
+              >
+              {%- if style != '1' -%}
                 <img
                   class="hp b d2"
-                  src="{% if p.featured_image %}{{ p.featured_image | image_url: width: 900 }}{% else %}{{ 'p-tbtl.svg' | asset_url }}{% endif %}"
-                  alt="{{ p.title | escape }}"
+                  src="{% if p2.featured_image %}{{ p2.featured_image | image_url: width: 900 }}{% else %}{{ 'p-kbtl.svg' | asset_url }}{% endif %}"
+                  alt="{{ p2.title | escape }}"
                   width="380"
                   height="1180"
                 >
               {%- endif -%}
-              {%- if style == '3' and block.settings.product_3 != blank -%}
-                {%- assign p = block.settings.product_3 -%}
+              {%- if style == '3' -%}
                 <img
                   class="hp c d3"
-                  src="{% if p.featured_image %}{{ p.featured_image | image_url: width: 900 }}{% else %}{{ 'p-mbtl.svg' | asset_url }}{% endif %}"
-                  alt="{{ p.title | escape }}"
+                  src="{% if p3.featured_image %}{{ p3.featured_image | image_url: width: 900 }}{% else %}{{ 'p-mbtl.svg' | asset_url }}{% endif %}"
+                  alt="{{ p3.title | escape }}"
                   width="360"
                   height="1054"
                 >
@@ -97,10 +110,10 @@
               <div class="glass-2 ptag">
                 <span class="lbl">{{ block.settings.label }}</span>
                 <span class="val">
-                  {%- if block.settings.product_1 and style == '1' and block.settings.use_product_price -%}
-                    <strong>{{ block.settings.product_1.price | money_without_trailing_zeros }}</strong>
-                    {%- if block.settings.product_1.compare_at_price > block.settings.product_1.price -%}
-                      <s>{{ block.settings.product_1.compare_at_price | money_without_trailing_zeros }}</s>
+                  {%- if style == '1' and block.settings.use_product_price and p1.price > 0 -%}
+                    <strong>{{ p1.price | money_without_trailing_zeros }}</strong>
+                    {%- if p1.compare_at_price > p1.price -%}
+                      <s>{{ p1.compare_at_price | money_without_trailing_zeros }}</s>
                     {%- endif -%}
                   {%- else -%}
                     <strong>{{ block.settings.price_label }}</strong>

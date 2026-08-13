@@ -7,7 +7,7 @@
     assign rating_n = 5
   endif
 -%}
-<article class="glass-2 rcard"{% if duplicate %} aria-hidden="true"{% endif %}>
+<article class="glass-2 rcard"{% if duplicate == true %} aria-hidden="true"{% endif %}>
   <div class="st" aria-label="{{ rating_n }} out of 5 stars">
     {%- for i in (1..5) -%}{%- if i <= rating_n -%}★{%- else -%}☆{%- endif -%}{%- endfor -%}
   </div>

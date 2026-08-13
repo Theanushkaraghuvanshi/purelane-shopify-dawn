@@ -17,6 +17,8 @@ This build was done in Cursor with an agent (Composer). That is how I normally w
 - **Liquid `concat` of a product onto an empty array** and **escaped `<br>` in badge labels** — classic “looks right in the prompt, breaks in Shopify”. I had to correct both.
 - **Product media:** Shopify will not use SVG as product images. Needed an extra rasterise step the first CSS pass ignored.
 - **Theme-editor JS:** a one-shot script from the HTML file would leak timers when sections are removed. I rewrote init/teardown around `shopify:section:load` / `unload`.
+- **Push-then-seed order.** `index.json` product handles were stripped because the catalog did not exist yet. Empty Shopify product drops are also *truthy*, so `{% if product %}` hid price fallbacks. Fix: seed first, or `all_products[handle]` + `product.handle != blank`.
+- **Liquid `0` is truthy.** Passing `forloop.index0` as `duplicate` marked every review card `aria-hidden`.
 - Pixel match still needs a human eye at 375px. Agents are confident and wrong about spacing.
 
 ## What I’d systematise for twenty more of these
