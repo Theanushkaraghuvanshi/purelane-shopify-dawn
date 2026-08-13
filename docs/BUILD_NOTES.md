@@ -9,7 +9,7 @@ Theme: stock **Dawn 16.0.0** with custom Purelane sections. Horizon remains in t
 - The shop grid **duplicates the same four products** with two different image techniques. We render eight unique live products instead.
 - Product “photos” are CSS `background-image` data-URIs and inline SVGs, not images. Bad for LCP, caching, and Shopify media.
 - Duplicate SVG `id`s (`cg`, `wf`, shop-card gradient ids) make the file invalid when more than one graphic is on the page.
-- `feTurbulence` water filters are expensive on main thread / GPU. We kept the caustic *look* with lighter SVG strokes and no displacement maps.
+- `feTurbulence` water filters are expensive on main thread / GPU. We kept them because they are the mint/teal look of the file; they are disabled under `prefers-reduced-motion`.
 - Reveal animation uses `filter: blur()` which is a paint cost. Honoured, but disabled under `prefers-reduced-motion`.
 - Prices, ratings, and copy are hardcoded. A marketing team could not run this.
 - Marquee duplicates markup (correct pattern) but the duplicate set was not `aria-hidden`.

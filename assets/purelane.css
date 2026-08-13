@@ -81,6 +81,12 @@ body.purelane-home :focus-visible {
 }
 
 /* Hide Dawn chrome on the Purelane homepage */
+body.purelane-home.gradient,
+body.purelane-home {
+  background: transparent !important;
+  background-attachment: scroll !important;
+}
+
 body.purelane-home .shopify-section-group-header-group,
 body.purelane-home .shopify-section-group-footer-group {
   display: none;
@@ -88,7 +94,10 @@ body.purelane-home .shopify-section-group-footer-group {
 
 body.purelane-home #MainContent {
   flex: 1;
-  isolation: isolate;
+  isolation: auto;
+  background: transparent;
+  position: relative;
+  z-index: 2;
 }
 
 /* ---------- TYPE ---------- */
@@ -966,17 +975,66 @@ body.purelane-home .hslide.on {
   opacity: 1;
 }
 
+body.purelane-home {
+  --p-kbtl: url(p-kbtl.svg);
+  --p-tbtl: url(p-tbtl.svg);
+  --p-mbtl: url(p-mbtl.svg);
+}
+
+body.purelane-home .p-kbtl {
+  background-image: var(--p-kbtl);
+  aspect-ratio: 0.3229;
+}
+body.purelane-home .p-tbtl {
+  background-image: var(--p-tbtl);
+  aspect-ratio: 0.322;
+}
+body.purelane-home .p-mbtl {
+  background-image: var(--p-mbtl);
+  aspect-ratio: 0.3416;
+}
+
 body.purelane-home .hp {
   position: relative;
   width: auto;
-  height: auto;
   flex: 0 0 auto;
-  object-fit: contain;
-  object-position: center bottom;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
   opacity: 0;
   transform: translateY(28px) scale(0.94);
   transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
   filter: drop-shadow(0 26px 40px rgba(1, 22, 20, 0.66));
+}
+
+body.purelane-home .rail {
+  position: fixed;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 44;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 1180px) {
+  body.purelane-home .rail {
+    display: flex;
+  }
+}
+body.purelane-home .rail a {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(236, 230, 247, 0.26);
+  transition: 0.3s var(--ease);
+  position: relative;
+}
+body.purelane-home .rail a.on {
+  background: var(--accent);
+  box-shadow: 0 0 0 5px rgba(240, 160, 60, 0.18);
+  height: 22px;
+  border-radius: 999px;
 }
 
 body.purelane-home .hslide.on .hp {
@@ -1815,6 +1873,9 @@ body.purelane-home .pl-empty {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  body.purelane-home .wl .sv g {
+    filter: none !important;
+  }
   body.purelane-home .wl-a,
   body.purelane-home .wl-b,
   body.purelane-home .wl-c,

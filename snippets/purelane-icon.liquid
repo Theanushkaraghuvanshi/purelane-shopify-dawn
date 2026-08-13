@@ -3,6 +3,8 @@
   Accepts: icon (leaf | shield | ban | check | arrow | search | account | cart | menu | star)
 {%- endcomment -%}
 {%- case icon -%}
+  {%- when 'mark' -%}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#b8701c"><path d="M12 3 20.5 8v8L12 21 3.5 16V8L12 3Z"/><path d="M12 12 20.5 8M12 12v9M12 12 3.5 8"/></svg>
   {%- when 'leaf' -%}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21c0-6.5 3.5-11 8-12.5C20 15 16.5 20 12 21Z"/><path d="M12 21C12 14.5 8.5 10 4 8.5 4 15 7.5 20 12 21Z"/></svg>
   {%- when 'shield' -%}

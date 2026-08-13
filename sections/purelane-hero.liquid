@@ -66,46 +66,19 @@
             <div class="hslide hs{{ style }}{% if forloop.first %} on{% endif %}" data-n="{{ forloop.index }}" {{ block.shopify_attributes }}>
               {%- liquid
                 assign p1 = block.settings.product_1
-                assign p2 = block.settings.product_2
-                assign p3 = block.settings.product_3
                 if p1.handle == blank
-                  if style == '1'
-                    assign p1 = all_products['kitchen-cleaner-foaming']
-                  else
-                    assign p1 = all_products['tap-cleaner-limescale-remover']
-                  endif
-                endif
-                if p2.handle == blank
-                  assign p2 = all_products['kitchen-cleaner-foaming']
-                endif
-                if p3.handle == blank
-                  assign p3 = all_products['copper-bronze-brass-cleaner']
+                  assign p1 = all_products['kitchen-cleaner-foaming']
                 endif
               -%}
-              <img
-                class="hp a d1"
-                src="{% if p1.featured_image %}{{ p1.featured_image | image_url: width: 900 }}{% elsif style == '1' %}{{ 'p-kbtl.svg' | asset_url }}{% else %}{{ 'p-tbtl.svg' | asset_url }}{% endif %}"
-                alt="{{ p1.title | default: block.settings.label | escape }}"
-                width="380"
-                height="1177"
-              >
-              {%- if style != '1' -%}
-                <img
-                  class="hp b d2"
-                  src="{% if p2.featured_image %}{{ p2.featured_image | image_url: width: 900 }}{% else %}{{ 'p-kbtl.svg' | asset_url }}{% endif %}"
-                  alt="{{ p2.title | escape }}"
-                  width="380"
-                  height="1180"
-                >
-              {%- endif -%}
-              {%- if style == '3' -%}
-                <img
-                  class="hp c d3"
-                  src="{% if p3.featured_image %}{{ p3.featured_image | image_url: width: 900 }}{% else %}{{ 'p-mbtl.svg' | asset_url }}{% endif %}"
-                  alt="{{ p3.title | escape }}"
-                  width="360"
-                  height="1054"
-                >
+              {%- if style == '1' -%}
+                <span class="hp p-kbtl a d1" role="img" aria-label="Purelane foaming kitchen cleaner spray bottle"></span>
+              {%- elsif style == '2' -%}
+                <span class="hp p-tbtl a d1" role="img" aria-label="Purelane tap cleaner and limescale remover spray bottle"></span>
+                <span class="hp p-kbtl b d2" role="img" aria-label="Purelane foaming kitchen cleaner spray bottle"></span>
+              {%- else -%}
+                <span class="hp p-tbtl a d1" role="img" aria-label="Purelane tap cleaner and limescale remover spray bottle"></span>
+                <span class="hp p-mbtl b d2" role="img" aria-label="Purelane copper, bronze and brass cleaner pump bottle"></span>
+                <span class="hp p-kbtl c d3" role="img" aria-label="Purelane foaming kitchen cleaner spray bottle"></span>
               {%- endif -%}
               <div class="glass-2 ptag">
                 <span class="lbl">{{ block.settings.label }}</span>

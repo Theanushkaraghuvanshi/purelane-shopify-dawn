@@ -19,7 +19,7 @@
 <header class="pl-header" id="pl-hdr" data-pl-header>
   <div class="navpill glass">
     <a class="brand" href="{{ routes.root_url }}" aria-label="{{ section.settings.logo_text | default: shop.name }} home">
-      <span class="mark">{% render 'purelane-icon', icon: 'leaf' %}</span>
+      <span class="mark">{% render 'purelane-icon', icon: 'mark' %}</span>
       <span class="txt">
         <span class="n1">{{ section.settings.logo_text | default: shop.name }}</span>
         <span class="n2">{{ section.settings.tagline }}</span>
@@ -32,10 +32,10 @@
         {%- endfor -%}
       {%- else -%}
         <a href="#top">Home</a>
+        <a href="#shop">Ingredients</a>
+        <a href="#combos">How it works</a>
         <a href="#shop">Shop</a>
-        <a href="#combos">Combos</a>
         <a href="#bundles">Bundles</a>
-        <a href="#reviews">Reviews</a>
       {%- endif -%}
     </nav>
     <div class="navtools">
@@ -60,10 +60,10 @@
       {%- endfor -%}
     {%- else -%}
       <a href="#top">Home</a>
+      <a href="#shop">Ingredients</a>
+      <a href="#combos">How it works</a>
       <a href="#shop">Shop</a>
-      <a href="#combos">Combos</a>
       <a href="#bundles">Bundles</a>
-      <a href="#reviews">Reviews</a>
     {%- endif -%}
   </nav>
 </div>
