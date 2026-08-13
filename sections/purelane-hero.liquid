@@ -1,0 +1,216 @@
+<section class="hero" data-scene="1" id="top">
+  <div class="hero-grid">
+    {%- assign badges = section.blocks | where: 'type', 'badge' -%}
+    {%- if badges.size > 0 -%}
+      <div class="badges glass-2" aria-label="Product promises">
+        {%- for block in badges -%}
+          <div class="badge" {{ block.shopify_attributes }}>
+            <span class="bi">{% render 'purelane-icon', icon: block.settings.icon %}</span>
+            <span>
+              {%- assign badge_lines = block.settings.label | split: '|' -%}
+              {%- for line in badge_lines -%}
+                {{ line | strip }}{% unless forloop.last %}<br>{% endunless %}
+              {%- endfor -%}
+            </span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="hero-copy">
+      <h1 class="d1 rv in">
+        {{ section.settings.heading_1 }}<br>
+        {{ section.settings.heading_2 }}<br>
+        <span class="lime">{{ section.settings.heading_accent }}</span>
+      </h1>
+      <div class="rule rv rv-d1">
+        <i></i>
+        {% render 'purelane-icon', icon: 'leaf' %}
+        <i></i>
+      </div>
+      {%- if section.settings.lede != blank -%}
+        <p class="lede rv rv-d2">{{ section.settings.lede }}</p>
+      {%- endif -%}
+      <div class="hero-cta rv rv-d3">
+        {%- if section.settings.cta_primary_label != blank -%}
+          <a class="btn btn-primary" href="{{ section.settings.cta_primary_link | default: '#shop' }}">
+            {{ section.settings.cta_primary_label }}
+            {% render 'purelane-icon', icon: 'arrow' %}
+          </a>
+        {%- endif -%}
+        {%- if section.settings.cta_secondary_label != blank -%}
+          <a class="btn btn-ghost" href="{{ section.settings.cta_secondary_link | default: '#how' }}">
+            {{ section.settings.cta_secondary_label }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if badges.size > 0 -%}
+        <div class="badgestrip rv rv-d4">
+          {%- for block in badges -%}
+            <div class="glass-2">
+              {% render 'purelane-icon', icon: block.settings.icon %}
+              {{ block.settings.short_label | default: block.settings.label }}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- assign slides = section.blocks | where: 'type', 'slide' -%}
+    {%- if slides.size > 0 -%}
+      <div class="hero-prod" id="heroProd" data-pl-hero-prod>
+        <div class="hstage" data-pl-hstage>
+          {%- for block in slides -%}
+            {%- assign style = block.settings.style -%}
+            <div class="hslide hs{{ style }}{% if forloop.first %} on{% endif %}" data-n="{{ forloop.index }}" {{ block.shopify_attributes }}>
+              {%- if block.settings.product_1 != blank -%}
+                {%- assign p = block.settings.product_1 -%}
+                <img
+                  class="hp a d1"
+                  src="{% if p.featured_image %}{{ p.featured_image | image_url: width: 900 }}{% else %}{{ 'p-kbtl.svg' | asset_url }}{% endif %}"
+                  alt="{{ p.title | escape }}"
+                  width="380"
+                  height="1177"
+                >
+              {%- endif -%}
+              {%- if style != '1' and block.settings.product_2 != blank -%}
+                {%- assign p = block.settings.product_2 -%}
+                <img
+                  class="hp b d2"
+                  src="{% if p.featured_image %}{{ p.featured_image | image_url: width: 900 }}{% else %}{{ 'p-tbtl.svg' | asset_url }}{% endif %}"
+                  alt="{{ p.title | escape }}"
+                  width="380"
+                  height="1180"
+                >
+              {%- endif -%}
+              {%- if style == '3' and block.settings.product_3 != blank -%}
+                {%- assign p = block.settings.product_3 -%}
+                <img
+                  class="hp c d3"
+                  src="{% if p.featured_image %}{{ p.featured_image | image_url: width: 900 }}{% else %}{{ 'p-mbtl.svg' | asset_url }}{% endif %}"
+                  alt="{{ p.title | escape }}"
+                  width="360"
+                  height="1054"
+                >
+              {%- endif -%}
+              <div class="glass-2 ptag">
+                <span class="lbl">{{ block.settings.label }}</span>
+                <span class="val">
+                  {%- if block.settings.product_1 and style == '1' and block.settings.use_product_price -%}
+                    <strong>{{ block.settings.product_1.price | money_without_trailing_zeros }}</strong>
+                    {%- if block.settings.product_1.compare_at_price > block.settings.product_1.price -%}
+                      <s>{{ block.settings.product_1.compare_at_price | money_without_trailing_zeros }}</s>
+                    {%- endif -%}
+                  {%- else -%}
+                    <strong>{{ block.settings.price_label }}</strong>
+                    {%- if block.settings.compare_label != blank -%}
+                      <s>{{ block.settings.compare_label }}</s>
+                    {%- endif -%}
+                  {%- endif -%}
+                </span>
+                {%- if block.settings.save_label != blank -%}
+                  <span class="cut">{{ block.settings.save_label }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+        <div class="hdots" data-pl-hdots role="tablist" aria-label="Hero offers">
+          {%- for block in slides -%}
+            <button
+              type="button"
+              class="{% if forloop.first %}on{% endif %}"
+              aria-label="{{ block.settings.label | default: 'Show offer' }}"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            ></button>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Purelane hero",
+  "tag": "div",
+  "class": "purelane-hero-section",
+  "settings": [
+    { "type": "text", "id": "heading_1", "label": "Heading line 1", "default": "Clean" },
+    { "type": "text", "id": "heading_2", "label": "Heading line 2", "default": "That" },
+    { "type": "text", "id": "heading_accent", "label": "Accent line", "default": "Lasts" },
+    {
+      "type": "textarea",
+      "id": "lede",
+      "label": "Lede",
+      "default": "Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it."
+    },
+    { "type": "text", "id": "cta_primary_label", "label": "Primary button", "default": "Shop now" },
+    { "type": "url", "id": "cta_primary_link", "label": "Primary link" },
+    { "type": "text", "id": "cta_secondary_label", "label": "Secondary button", "default": "How it works" },
+    { "type": "url", "id": "cta_secondary_link", "label": "Secondary link" }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Promise badge",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "ban", "label": "Ban" }
+          ],
+          "default": "leaf"
+        },
+        { "type": "text", "id": "label", "label": "Label", "default": "Plant powered" },
+        { "type": "text", "id": "short_label", "label": "Mobile label" }
+      ]
+    },
+    {
+      "type": "slide",
+      "name": "Offer slide",
+      "limit": 6,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Price label", "default": "Single bottle" },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Layout",
+          "options": [
+            { "value": "1", "label": "1 product" },
+            { "value": "2", "label": "2 products" },
+            { "value": "3", "label": "3 products" }
+          ],
+          "default": "1"
+        },
+        { "type": "product", "id": "product_1", "label": "Product 1" },
+        { "type": "product", "id": "product_2", "label": "Product 2" },
+        { "type": "product", "id": "product_3", "label": "Product 3" },
+        { "type": "checkbox", "id": "use_product_price", "label": "Use product 1 price on single slides", "default": true },
+        { "type": "text", "id": "price_label", "label": "Price fallback", "default": "₹200" },
+        { "type": "text", "id": "compare_label", "label": "Compare-at fallback", "default": "₹299" },
+        { "type": "text", "id": "save_label", "label": "Save badge", "default": "33% off" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane hero",
+      "blocks": [
+        { "type": "badge", "settings": { "icon": "leaf", "label": "Plant<br>powered", "short_label": "Plant powered" } },
+        { "type": "badge", "settings": { "icon": "shield", "label": "Safe for<br>kids & pets", "short_label": "Kids & pet safe" } },
+        { "type": "badge", "settings": { "icon": "ban", "label": "Zero harsh<br>chemicals", "short_label": "Zero harsh chem" } },
+        { "type": "slide", "settings": { "label": "Single bottle", "style": "1", "price_label": "₹200", "compare_label": "₹299", "save_label": "33% off" } },
+        { "type": "slide", "settings": { "label": "Any 2 products", "style": "2", "price_label": "₹349", "compare_label": "₹598", "save_label": "Save ₹249", "use_product_price": false } },
+        { "type": "slide", "settings": { "label": "Any 3 products", "style": "3", "price_label": "₹499", "compare_label": "₹897", "save_label": "Save ₹398", "use_product_price": false } }
+      ]
+    }
+  ]
+}
+{% endschema %}
