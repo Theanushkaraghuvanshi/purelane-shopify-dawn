@@ -1,0 +1,58 @@
+{%- comment -%}
+  Product card for the shop grid.
+  Accepts: product, delay_class
+{%- endcomment -%}
+{%- liquid
+  assign delay_class = delay_class | default: ''
+  assign variant = product.selected_or_first_available_variant
+  assign badge = product.metafields.custom.badge
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count
+  if rating == blank and product.metafields.reviews.rating != blank
+    assign rating = product.metafields.reviews.rating
+  endif
+-%}
+<article class="glass card rv {{ delay_class }}">
+  <div class="shot">
+    {%- if badge != blank -%}
+      <span class="pill">{{ badge }}</span>
+    {%- elsif product.available == false -%}
+      <span class="pill">Sold out</span>
+    {%- endif -%}
+    {%- if product.featured_image -%}
+      <img
+        class="pimg"
+        src="{{ product.featured_image | image_url: width: 480 }}"
+        alt="{{ product.featured_image.alt | default: product.title | escape }}"
+        width="{{ product.featured_image.width }}"
+        height="{{ product.featured_image.height }}"
+        loading="lazy"
+      >
+    {%- else -%}
+      <span class="ph-empty">No image</span>
+    {%- endif -%}
+  </div>
+  <h3>
+    <a href="{{ product.url }}">{{ product.title }}</a>
+  </h3>
+  {%- if rating != blank and rating_count != blank -%}
+    <div class="rate"><b>★ {{ rating }}</b> · {{ rating_count }} reviews</div>
+  {%- elsif rating != blank -%}
+    <div class="rate"><b>★ {{ rating }}</b></div>
+  {%- endif -%}
+  <div class="pr">
+    {% render 'purelane-price', price: variant.price, compare_at: variant.compare_at_price, save_style: 'percent' %}
+  </div>
+  {%- if variant and product.available -%}
+    <button
+      type="button"
+      class="btn btn-ghost btn-sm"
+      data-pl-atc
+      data-variant-id="{{ variant.id }}"
+    >
+      Add to cart
+    </button>
+  {%- else -%}
+    <a class="btn btn-ghost btn-sm is-disabled" href="{{ product.url }}" aria-disabled="true">Sold out</a>
+  {%- endif -%}
+</article>
